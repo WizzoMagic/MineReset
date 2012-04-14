@@ -8,18 +8,17 @@ With Mine Reset, all you need to do is set up an area, set up the block ratios u
 Features
 --------
 
- * Select a region with ease
- * Add a custom block ratio - all materials supported
- * Reset the mine with one command
- * Ability to have several mines, each with its own ratio
- * Permissions support; per-mine permissions!
+ * Automatic mine resets at customizable periods of time
+ * Manual reset with an optional delay to warn players in the mine
+ * Reset mines by right-clicking a sign!
+ * Easy region selection and setup
+ * Custom block ratios support - customize your mine to whatever you want
+ * Ability to set up multiple mines, each with its own custom settings
+ * Permissions support, including per-mine support
 
 Planned Future Features
 -----------------------
 
- * Automatic resets at custom periods of time (custom for each mine)
- * Individual permission nodes for each mine Done!
- * Resetting a mine with a click of a button or by punching a sign. Or both!
  * Customize the messages!
  * Teleportation to the mine with a defined "mine spawn" point
  * Teleport players out of the mine before it resets
