@@ -1,5 +1,6 @@
 package com.wolvencraft.MineReset.cmd;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Location;
@@ -30,12 +31,13 @@ public class Save
 			Util.sendError("Make a selection first");
 			return;
 		}
-		
 		if(loc[0].getWorld() == loc[1].getWorld())
 		{
 			Util.sendError("Your selection points are in different worlds");
 			return;
 		}
+		
+		if(Util.debugEnabled()) Util.log("Selections checks passed");
 		
 		String mineName = args[1];
 		if(CommandManager.mineExists(mineName))
@@ -43,15 +45,19 @@ public class Save
 			Util.sendError("Mine " + mineName + " already exists!");
 			return;
 		}
+		if(Util.debugEnabled()) Util.log("Mine existance check passed");
 		
+		if(Util.debugEnabled()) Util.log("Reading default values");
 		// - Fetching the default values
 		// - - Is the mine enabled by default?
 		boolean enabled = Util.getConfigBoolean("defaults.enabled");
+		
 		
 		// - - Blacklist defaults
 		boolean blacklistEnabled = Util.getConfigBoolean("defaults.blacklist.enabled");
 		boolean whitelistEnabled = Util.getConfigBoolean("defaults.blacklist.whitelist");
 		List<String> blacklistedBlocks = Util.getConfigList("defaults.blacklist.blocks");
+		
 		
 		// - - Protection defaults
 		int protectionPadding = Util.getConfigInt("defaults.protection.padding");
@@ -72,6 +78,9 @@ public class Save
 		boolean protectionPlacingWhitelistEnabled = Util.getConfigBoolean("defaults.protection.placing.blacklist.whitelist");
 		List<String> protectionPlacingBlacklistedBlocks = Util.getConfigList("defaults.protection.placing.blacklist.blocks");
 		
+		// - - Materials
+		String defaultBlock = Util.getConfigString("defaults.materials.default-block");
+		
 		// - - Reset
 		
 		// - - - Auto
@@ -84,16 +93,25 @@ public class Save
 		boolean resetManualCooldownEnabled = Util.getConfigBoolean("defaults.reset.manual.cooldown-enabled");
 		int resetManualCooldownTime = Util.getConfigInt("defaults.reset.manual.cooldown-time");
 		
+		
+		
+		
+		if(Util.debugEnabled()) Util.log("Finished reading defaults");
+		
 		// = Setting values to the mine
 		String baseNode = "mines." + mineName;
 		// = = Basic info
 		Util.setRegionBoolean(baseNode + ".enabled", enabled);
+		
+		if(Util.debugEnabled()) Util.log("Writing blacklist data");
 		
 		// = = Blacklist
 		baseNode = "mines." + mineName + ".blacklist";
 		Util.setRegionBoolean(baseNode + ".enabled", blacklistEnabled);
 		Util.setRegionBoolean(baseNode + ".whitelist", whitelistEnabled);
 		Util.setRegionList(baseNode + ".blocks", blacklistedBlocks);
+		
+		if(Util.debugEnabled()) Util.log("Writing protection data");
 		
 		// = = Protection
 		baseNode = "mines." + mineName + ".protection";
@@ -117,19 +135,35 @@ public class Save
 		Util.setRegionBoolean(baseNode + ".blacklist.whitelist", protectionPlacingWhitelistEnabled);
 		Util.setRegionList(baseNode + ".blacklist.blocks", protectionPlacingBlacklistedBlocks);
 		
+		if(Util.debugEnabled()) Util.log("Writing coordinates");
+		
 		// = = Coordinates
 		baseNode = "mines." + mineName + ".coordinates";
 		Util.setRegionString(baseNode + ".world", loc[0].getWorld().getName());
 		
 		// = = = Position 0
-		Util.setRegionDouble(baseNode + ".pos0.x", loc[0].getX());
-		Util.setRegionDouble(baseNode + ".pos0.y", loc[0].getY());
-		Util.setRegionDouble(baseNode + ".pos0.z", loc[0].getZ());
+		Util.setRegionInt(baseNode + ".pos0.x", (int)loc[0].getX());
+		Util.setRegionInt(baseNode + ".pos0.y", (int)loc[0].getY());
+		Util.setRegionInt(baseNode + ".pos0.z", (int)loc[0].getZ());
 		
 		// = = = Position 1
-		Util.setRegionDouble(baseNode + ".pos1.x", loc[1].getX());
-		Util.setRegionDouble(baseNode + ".pos1.y", loc[1].getY());
-		Util.setRegionDouble(baseNode + ".pos1.z", loc[1].getZ());
+		Util.setRegionInt(baseNode + ".pos1.x", (int)loc[1].getX());
+		Util.setRegionInt(baseNode + ".pos1.y", (int)loc[1].getY());
+		Util.setRegionInt(baseNode + ".pos1.z", (int)loc[1].getZ());
+		
+		if(Util.debugEnabled()) Util.log("Writing reset data");
+		
+		// = = Materials
+		baseNode = "mines." + mineName + ".materials";
+		List<String> blockList = new ArrayList<String>();
+		blockList.add(defaultBlock);
+		List<String> weightList = new ArrayList<String>();
+		weightList.add("100");
+		// = = = Blocks
+		Util.setRegionList(baseNode + ".blocks", blockList);
+		
+		// = = = Weights
+		Util.setRegionList(baseNode + ".weights", blockList);
 		
 		// = = Reset
 		// = = = Automatic
@@ -144,6 +178,11 @@ public class Save
 		Util.setRegionBoolean(baseNode + ".cooldown-enabled", resetManualCooldownEnabled);
 		Util.setRegionInt(baseNode + ".cooldown-time", resetManualCooldownTime);
 		
+		if(Util.debugEnabled()) Util.log("Mine creation completed");
+		
+		Util.saveRegionData();
+		
+		if(Util.debugEnabled()) Util.log("Data saved successfully");
 		
 	}
 }
