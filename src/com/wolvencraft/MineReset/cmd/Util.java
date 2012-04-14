@@ -215,6 +215,17 @@ public class Util
 	/**
 	 * Returns configuration data from the node
 	 * @param node Configuration node
+	 * @return double to be returned
+	 */
+	public static double getConfigDouble(String node)
+	{
+		double intToReturn = CommandManager.getPlugin().getConfig().getDouble(node);
+		return intToReturn;
+	}
+	
+	/**
+	 * Returns configuration data from the node
+	 * @param node Configuration node
 	 * @return List<String> to be returned
 	 */
 	public static List<String> getConfigList(String node)
@@ -251,6 +262,16 @@ public class Util
 	 * @param data Data to be set
 	 */
 	public static void setConfigInt(String node, int data)
+	{
+		CommandManager.getPlugin().getConfig().set(node, data);
+	}
+	
+	/**
+	 * Sets configuration data to a designated node
+	 * @param node Configuration node
+	 * @param data Data to be set
+	 */
+	public static void setConfigDouble(String node, double data)
 	{
 		CommandManager.getPlugin().getConfig().set(node, data);
 	}
@@ -303,6 +324,17 @@ public class Util
 	/**
 	 * Returns region data from the node
 	 * @param node Configuration node
+	 * @return int to be returned
+	 */
+	public static double getRegionDouble(String node)
+	{
+		double intToReturn = CommandManager.getPlugin().getRegionData().getDouble(node);
+		return intToReturn;
+	}
+	
+	/**
+	 * Returns region data from the node
+	 * @param node Configuration node
 	 * @return List<String> to be returned
 	 */
 	public static List<String> getRegionList(String node)
@@ -339,6 +371,16 @@ public class Util
 	 * @param data Data to be set
 	 */
 	public static void setRegionInt(String node, int data)
+	{
+		CommandManager.getPlugin().getRegionData().set(node, data);
+	}
+	
+	/**
+	 * Sets region data to a designated node
+	 * @param node Configuration node
+	 * @param data Data to be set
+	 */
+	public static void setRegionDouble(String node, double data)
 	{
 		CommandManager.getPlugin().getRegionData().set(node, data);
 	}
