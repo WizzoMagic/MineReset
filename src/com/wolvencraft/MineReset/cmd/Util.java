@@ -237,56 +237,6 @@ public class Util
 	}
 	
 	/**
-	 * Sets configuration data to a designated node
-	 * @param node Configuration node
-	 * @param data Data to be set
-	 */
-	public static void setConfigString(String node, String data)
-	{
-		CommandManager.getPlugin().getConfig().set(node, data);
-	}
-	
-	/**
-	 * Sets configuration data to a designated node
-	 * @param node Configuration node
-	 * @param data Data to be set
-	 */
-	public static void setConfigBoolean(String node, boolean data)
-	{
-		CommandManager.getPlugin().getConfig().set(node, data);
-	}
-	
-	/**
-	 * Sets configuration data to a designated node
-	 * @param node Configuration node
-	 * @param data Data to be set
-	 */
-	public static void setConfigInt(String node, int data)
-	{
-		CommandManager.getPlugin().getConfig().set(node, data);
-	}
-	
-	/**
-	 * Sets configuration data to a designated node
-	 * @param node Configuration node
-	 * @param data Data to be set
-	 */
-	public static void setConfigDouble(String node, double data)
-	{
-		CommandManager.getPlugin().getConfig().set(node, data);
-	}
-	
-	/**
-	 * Sets configuration data to a designated node
-	 * @param node Configuration node
-	 * @param data Data to be set
-	 */
-	public static void setConfigList(String node, List<String> data)
-	{
-		CommandManager.getPlugin().getConfig().set(node, data);
-	}
-	
-	/**
 	 * Returns region data from the node
 	 * @param node Configuration node
 	 * @return String to be returned
@@ -393,5 +343,10 @@ public class Util
 	public static void setRegionList(String node, List<String> data)
 	{
 		CommandManager.getPlugin().getRegionData().set(node, data);
+	}
+	
+	public static void saveRegionData()
+	{
+		CommandManager.getPlugin().saveRegionData();
 	}
 }
