@@ -1,0 +1,4 @@
+mines: []
+data:
+  number-of-mines: 0
+  list-of-mines: []

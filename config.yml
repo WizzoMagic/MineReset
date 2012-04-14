@@ -1,0 +1,33 @@
+configuration:
+  debug-mode: true
+defaults:
+  enabled: true
+  blacklist:
+    enabled: true
+    whitelist: false
+    blocks: []
+  protection:
+    padding: 0
+    padding-top: 0
+    breaking:
+      enabled: true
+      blacklist:
+        enabled: true
+        whitelist: false
+        blocks: []
+    placing:
+      enabled: true
+      blacklist:
+        enabled: true
+        whitelist: false
+        blocks: []
+    pvp: true
+messages:
+  title: "Mine Reset"
+  title-on-signs: "Reset"
+  manual-mine-reset-successful: "Mine %MINE% was reset!"
+  automatic-mine-reset-successful: "Mine %MINE% was reset! Next reset in %TIME% minutes."
+  invalid-command: "Invalid command! Use /mine help for help."
+  access-denied: "You do not have permission to do that"
+data:
+  version: 1.0b

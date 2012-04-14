@@ -1,0 +1,66 @@
+name: MineReset
+main: com.wolvencraft.MineReset.MineReset
+version: 0.3
+commands:
+  mine:
+    description: Default command
+    usage: /mine <command>
+permissions:
+  MineReset.*:
+    description: Gives access to all MineReset commands
+    children:
+      MineReset.break: true
+      MineReset.help: true
+      MineReset.reset: true
+      MineReset.info: true
+      MineReset.edit: true
+  MineReset.user:
+    description: Gives you basic user permissions
+    children:
+      MineReset.break: true
+      MineReset.help: true
+  MineReset.mod:
+    description: Gives you some advanced permissions
+    children:
+      MineReset.user: true
+      MineReset.reset: true
+      MineReset.info: true
+  MineReset.admin:
+    description: Gives you all the permissions
+    children:
+      MineReset.mod: true
+      MineReset.edit: true
+      MineReset.config: true
+      MineReset.timer: true
+  MineReset.break:
+    description: Allows you to break block in the mine
+    default: true
+  MineReset.help:
+    description: Allows you to see the plugin help
+    default: true
+  MineReset.reset:
+    description: Allows you to reset the mine
+    default: op
+  MineReset.info:
+    description: Allows you to look at the info about mines
+    default: op
+  MineReset.edit:
+    description: Allows you to create and edit mines
+    default: op
+  MineReset.config:
+    description: Allows you to saves the config to file and reload it form there
+    default: op
+  MineReset.timer:
+    description: Allows you edit the timing on auto-resetting mines
+    default: op
+  MineReset.sign:
+    description: Allows you to create and use reset signs
+    children:
+      MineReset.sign.create: true
+      MineReset.sign.use: true
+  MineReset.sign.create:
+    description: Allows you to create reset signs
+    default: op
+  MineReset.sign.user:
+    description: Allows you to use reset signs
+    default: true
