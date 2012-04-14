@@ -1,54 +1,57 @@
 package com.wolvencraft.MineReset.cmd;
 
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
+
+import com.wolvencraft.MineReset.CommandManager;
 
 public class Select
 {
 	public static Location[] run(String[] args)
 	{
+		if(!Util.isPlayer() || !Util.hasPermission("edit", false))
+		{
+			Util.sendDenied(args[0]);
+			return null;
+		}
+		
 		if(args.length == 1)
 		{
 			Help.getSelect();
-		
-		if(!Util.isPlayer() || !Util.hasPermission("edit", false))
-		{
-			Util.sendDenied(args[0])
-			return null;
 		}
-			
-		
-		if(args.length != 2)
+		if(args.length > 2)
 		{
-			sendError(sender, "Invalid parameters");
-			return false;
+			Util.sendInvalid(args[0] + " " + args[1] + " " + args[2]);
 		}
+		
+		Location[] loc = {null, null};
+		Player player = (Player) CommandManager.getSender();
 		
 		if(args[1].equalsIgnoreCase("hpos1"))
 		{
-			p1 = player.getTargetBlock(null, 100).getLocation();
-			sendSuccess (sender, "First point selected");
+			loc[0] = player.getTargetBlock(null, 100).getLocation();
+			Util.sendSuccess ("First point selected");
 		}
 		else if(args[1].equalsIgnoreCase("pos1"))
 		{
-			p1 = player.getLocation();
-			sendSuccess (sender, "First point selected");
+			loc[0] = player.getLocation();
+			Util.sendSuccess ("First point selected");
 		}
 		else if(args[1].equalsIgnoreCase("hpos2"))
 		{
-			p2 = player.getTargetBlock(null, 100).getLocation();
-			sendSuccess (sender, "Second point selected");
+			loc[1] = player.getTargetBlock(null, 100).getLocation();
+			Util.sendSuccess ("Second point selected");
 		}
 		else if(args[1].equalsIgnoreCase("pos2"))
 		{
-			p2 = player.getLocation();
-			sendSuccess (sender, "Second point selected");
+			loc[1] = player.getLocation();
+			Util.sendSuccess ("Second point selected");
 		}
 		else
 		{
-			sendError(sender, "Invalid subcommand. Use /mine help for help");
-			return false;
+			Util.sendError("Invalid subcommand. Use /mine help for help");
+			return null;
 		}
-		return true;
-	}
+		return loc;
 	}
 }
