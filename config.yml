@@ -22,6 +22,15 @@ defaults:
         whitelist: false
         blocks: []
     pvp: true
+  reset:
+    auto:
+      reset: true
+      reset-time: 15
+      warn: true
+      warn-time: 1
+    manual:
+      cooldown-enabled: true
+      cooldown-time: 5
 messages:
   title: "Mine Reset"
   title-on-signs: "Reset"

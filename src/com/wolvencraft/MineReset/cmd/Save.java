@@ -1,9 +1,8 @@
 package com.wolvencraft.MineReset.cmd;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import org.bukkit.Bukkit;
+import org.bukkit.Location;
 
 import com.wolvencraft.MineReset.CommandManager;
 
@@ -13,9 +12,30 @@ public class Save
 	{
 		if(Util.debugEnabled()) Util.log("Intitiating the creation of a new mine");
 		if(args.length == 1)
+		{
 			Help.getSave();
+			return;
+		}
 		if(args.length > 2)
+		{
 			Util.sendInvalid(args[0] + " " + args[1] + " " + args[2]);
+			return;
+		}
+		
+		if(Util.debugEnabled())Util.log("Argument check passed");
+		
+		Location[] loc = CommandManager.getLocation();
+		if(loc == null)
+		{
+			Util.sendError("Make a selection first");
+			return;
+		}
+		
+		if(loc[0].getWorld() == loc[1].getWorld())
+		{
+			Util.sendError("Your selection points are in different worlds");
+			return;
+		}
 		
 		String mineName = args[1];
 		if(CommandManager.mineExists(mineName))
@@ -51,7 +71,18 @@ public class Save
 		boolean protectionPlacingBlacklistEnabled = Util.getConfigBoolean("defaults.protection.placing.blacklist.enabled");
 		boolean protectionPlacingWhitelistEnabled = Util.getConfigBoolean("defaults.protection.placing.blacklist.whitelist");
 		List<String> protectionPlacingBlacklistedBlocks = Util.getConfigList("defaults.protection.placing.blacklist.blocks");
-				
+		
+		// - - Reset
+		
+		// - - - Auto
+		boolean resetAutoEnabled = Util.getConfigBoolean("defaults.reset.auto.reset");
+		int resetAutoTime = Util.getConfigInt("defaults.reset.auto.reset-time");
+		boolean resetAutoWarnEnabled = Util.getConfigBoolean("defaults.reset.auto.warn");
+		int resetAutoWarnTime = Util.getConfigInt("defaults.reset.auto.warn-time");
+		
+		// - - - Manual
+		boolean resetManualCooldownEnabled = Util.getConfigBoolean("defaults.reset.manual.cooldown-enabled");
+		int resetManualCooldownTime = Util.getConfigInt("defaults.reset.manual.cooldown-time");
 		
 		// = Setting values to the mine
 		String baseNode = "mines." + mineName;
@@ -85,6 +116,34 @@ public class Save
 		Util.setRegionBoolean(baseNode + ".blacklist.enabled", protectionPlacingBlacklistEnabled);
 		Util.setRegionBoolean(baseNode + ".blacklist.whitelist", protectionPlacingWhitelistEnabled);
 		Util.setRegionList(baseNode + ".blacklist.blocks", protectionPlacingBlacklistedBlocks);
+		
+		// = = Coordinates
+		baseNode = "mines." + mineName + ".coordinates";
+		Util.setRegionString(baseNode + ".world", loc[0].getWorld().getName());
+		
+		// = = = Position 0
+		Util.setRegionDouble(baseNode + ".pos0.x", loc[0].getX());
+		Util.setRegionDouble(baseNode + ".pos0.y", loc[0].getY());
+		Util.setRegionDouble(baseNode + ".pos0.z", loc[0].getZ());
+		
+		// = = = Position 1
+		Util.setRegionDouble(baseNode + ".pos1.x", loc[1].getX());
+		Util.setRegionDouble(baseNode + ".pos1.y", loc[1].getY());
+		Util.setRegionDouble(baseNode + ".pos1.z", loc[1].getZ());
+		
+		// = = Reset
+		// = = = Automatic
+		baseNode = "mines." + mineName + ".reset.auto";
+		Util.setRegionBoolean(baseNode + ".reset", resetAutoEnabled);
+		Util.setRegionInt(baseNode + ".reset-time", resetAutoTime);
+		Util.setRegionBoolean(baseNode + ".warn", resetAutoWarnEnabled);
+		Util.setRegionInt(baseNode + ".warn-time", resetAutoWarnTime);
+		
+		// = = = Manual
+		baseNode = "mines." + mineName + ".reset.manual";
+		Util.setRegionBoolean(baseNode + ".cooldown-enabled", resetManualCooldownEnabled);
+		Util.setRegionInt(baseNode + ".cooldown-time", resetManualCooldownTime);
+		
 		
 	}
 }
