@@ -49,7 +49,7 @@ public class Select
 		}
 		else
 		{
-			Util.sendError("Invalid subcommand. Use /mine help for help");
+			Util.sendInvalid(args[0] + " " + args[1] + " " + args[2]);
 			return null;
 		}
 		return loc;
