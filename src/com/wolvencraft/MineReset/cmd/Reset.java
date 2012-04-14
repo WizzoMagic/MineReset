@@ -6,8 +6,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 
-import com.wolvencraft.MineReset.CommandManager;
-import com.wolvencraft.MineReset.MineReset;
 import com.wolvencraft.MineReset.Utilities.Pattern;
 
 public class Reset
@@ -15,102 +13,86 @@ public class Reset
 	
 	public static void run(String mineName)
 	{
-		MineReset plugin = CommandManager.getPlugin();
-		int blacklist = -1;
-
-		List<String> blacklistBlocks = plugin.getRegions().getStringList(mineName + ".blacklist.blocks");
-		if(Util.debugEnabled()) Util.log("Determining world");
-		World curWorld = Bukkit.getServer().getWorld(plugin.getRegions().getString(mineName + ".coords.world"));
+		List<String> blockList = Util.getConfigList("mines." + mineName + ".materials.blocks");
+		List<String> weightList = Util.getConfigList("mines." + mineName + ".materials.weights");
+		Pattern pattern = new Pattern(blockList, weightList);
+		boolean blacklist = Util.getRegionBoolean("mines." + mineName + ".blacklist.enabled");
+		boolean whitelist = Util.getRegionBoolean("mines." + mineName + ".blacklist.whitelist");
+		List<String> blacklistedBlocks = null;
+		if(blacklist)
+			blacklistedBlocks = Util.getRegionList("mines." + mineName + ".blacklist.blocks");
+		String worldName = Util.getRegionString("mines." + mineName + ".coordinates.world");
+		World mineWorld = Bukkit.getServer().getWorld(worldName);
 		
-		if(Util.debugEnabled()) Util.log("Checking for blacklist");
-		if(plugin.getRegions().getBoolean(mineName + ".blacklist.enabled") && blacklistBlocks.size() != 0)
-		{
-			blacklist = true;
-			if(Util.debugEnabled()) Util.log("Blacklist found");
-			if(plugin.getRegions().getBoolean(mineName + ".blacklist.whitelist"))
-			{
-				whitelist = true;
-				if(Util.debugEnabled()) Util.log("Using the blacklist as a whitelist");
-			}
-		}
-		else
-			Util.log("The blacklist is empty or disabled");
-		
-		if(Util.debugEnabled()) Util.log("Initializing the reset");
-		
-		if(Util.debugEnabled()) Util.log("Creating a random pattern");
-		
-		List<String> itemList = plugin.getRegions().getStringList(mineName + ".blocks");
-		List<String> weightList = plugin.getRegions().getStringList(mineName + ".weights");
-
-		int[] items = new int[itemList.size()];
-		double[] weights = new double[weightList.size()];
-		for(int i = 0; i < itemList.size(); i++)
-		{
-			items[i] = Integer.parseInt(itemList.get(i));
-			weights[i] = Double.parseDouble(weightList.get(i));
-		}
-		
-		Pattern pattern = new Pattern(items, weights);
+		boolean broadcastReset = Util.getConfigBoolean("configuration.broadcast-on-reset");
 		
 		if(Util.debugEnabled()) Util.log("Determining coordinates");
 		
 		int[] point1 = {
-				plugin.getRegions().getInt(mineName + ".coords.p1.x"),
-				plugin.getRegions().getInt(mineName + ".coords.p1.y"),
-				plugin.getRegions().getInt(mineName + ".coords.p1.z")
+				Util.getRegionInt("mines." + mineName + ".coordinates.pos0.x"),
+				Util.getRegionInt("mines." + mineName + ".coordinates.pos0.y"),
+				Util.getRegionInt("mines." + mineName + ".coordinates.pos0.z")
 		};
 		int[] point2 = {
-				plugin.getRegions().getInt(mineName + ".coords.p2.x"),
-				plugin.getRegions().getInt(mineName + ".coords.p2.y"),
-				plugin.getRegions().getInt(mineName + ".coords.p2.z")
+				Util.getRegionInt("mines." + mineName + ".coordinates.pos1.x"),
+				Util.getRegionInt("mines." + mineName + ".coordinates.pos1.y"),
+				Util.getRegionInt("mines." + mineName + ".coordinates.pos1.z")
 		};
-		int blockID = 0;
-		if(Util.debugEnabled()) log.info("x " + point1[0] + ", " + point2[0]);
-		if(Util.debugEnabled()) log.info("y " + point1[1] + ", " + point2[1]);
-		if(debug) log.info("z " + point1[2] + ", " + point2[2]);
 		
-		if(blacklist)
+		int blockID = 0;
+		if(Util.debugEnabled()) Util.log("x " + point1[0] + ", " + point2[0]);
+		if(Util.debugEnabled()) Util.log("y " + point1[1] + ", " + point2[1]);
+		if(Util.debugEnabled()) Util.log("z " + point1[2] + ", " + point2[2]);
+		
+		// Comment for the future me:
+		// It makes more sense to handle all the logic here, since
+		// doing the same thing in the middle of resetting a bunch
+		// of blocks is clearly not the best idea ever. Best wishes,
+		// me from the past.
+		
+		if(whitelist)
 		{
-			if(whitelist)
+			for(int y = point1[1]; y <= point2[1]; y++)
 			{
-				for(int y = point1[1]; y <= point2[1]; y++)
+				for(int x = point1[0]; x <= point2[0]; x++)
 				{
-					for(int x = point1[0]; x <= point2[0]; x++)
+					for(int z = point1[2]; z <= point2[2]; z++ )
 					{
-						for(int z = point1[2]; z <= point2[2]; z++ )
+						Block b = mineWorld.getBlockAt(x, y, z);
+						blockID = pattern.next();
+						for(int i = 0; i < blacklistedBlocks.size(); i++)
 						{
-							Block b = curWorld.getBlockAt(x, y, z);
-							if(blacklistBlocks.indexOf(b.getTypeId() + "") == -1)
-							{
-								blockID = pattern.next();
+							if(blockID == Integer.parseInt(blacklistedBlocks.get(i)))
 								b.setTypeId(blockID);
-							}
+							else
+							{
+								if(Util.debugEnabled()) Util.log(blockID + " is not whitelisted and thus not replaced");
+							}	
 						}
 					}
-					if(debug) log.info("Completed plane" + y);
 				}
 			}
-			else
+		}
+		else if(blacklist)
+		{
+			for(int y = point1[1]; y <= point2[1]; y++)
 			{
-				for(int y = point1[1]; y <= point2[1]; y++)
+				for(int x = point1[0]; x <= point2[0]; x++)
 				{
-					for(int x = point1[0]; x <= point2[0]; x++)
+					for(int z = point1[2]; z <= point2[2]; z++ )
 					{
-						for(int z = point1[2]; z <= point2[2]; z++ )
+						Block b = mineWorld.getBlockAt(x, y, z);
+						blockID = pattern.next();
+						for(int i = 0; i < blacklistedBlocks.size(); i++)
 						{
-							Block b = curWorld.getBlockAt(x, y, z);
-							if(blacklistBlocks.indexOf(b.getTypeId() + "") != -1)
-							{
-								blockID = pattern.next();
-								if(debug) log.info(b.getTypeId() + " -> " + blockID);
-								b.setTypeId(blockID);
-							}
+							if(blockID == Integer.parseInt(blacklistedBlocks.get(i)))
+								if(Util.debugEnabled()) Util.log(blockID + " is blacklisted and thus not replaced");
 							else
-								if(debug) log.info(b.getTypeId() + " -/> O-");
+							{
+								b.setTypeId(blockID);
+							}	
 						}
 					}
-					if(debug) log.info("Completed plane" + y);
 				}
 			}
 		}
@@ -122,23 +104,18 @@ public class Reset
 				{
 					for(int z = point1[2]; z <= point2[2]; z++ )
 					{
-						Block b = curWorld.getBlockAt(x, y, z);
+						Block b = mineWorld.getBlockAt(x, y, z);
 						blockID = pattern.next();
-						b.setTypeId(blockID);			
+						b.setTypeId(blockID);
 					}
 				}
-				if(debug) log.info("Completed plane" + y);
 			}
 		}
 			
-		int min = plugin.getRegions().getInt(mineName + ".auto-reset.time.default-time");
-		plugin.getRegions().set(mineName + ".auto-reset.time.cur-min", min);
-		plugin.getRegions().set(mineName + ".auto-reset.time.cur-sec", 0);
-	    	
-	    plugin.saveRegions();
-		
-		
-		if(broadcast) broadcastReset(mineName);
-		return true;
+		if(broadcastReset)
+		{
+			String broadcastMessage = Util.getConfigString("messages.manual-mine-reset-successful");
+			Util.broadcastSuccess(broadcastMessage);
+		}
 	}
 }
