@@ -1,5 +1,6 @@
 configuration:
   debug-mode: true
+  default-name: "default"
   broadcast-on-reset: true
   use-permissions: true
   use-protection: true
