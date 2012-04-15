@@ -431,4 +431,17 @@ public class Util
 	  { return false; }  
 	  return true;  
 	}
+	
+
+	/**
+	 * Checks if the mine exists
+	 * @param name Name of the mine being checked
+	 * @return True if the mine exists, False if it does not
+	 */
+	public static boolean mineExists(String name)
+	{
+		List<String> mineList = getRegionList("data.list-of-mines");
+		if(mineList.indexOf(name) == -1) return false;
+		else return true;
+	}
 }

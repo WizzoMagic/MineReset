@@ -1,7 +1,5 @@
 package com.wolvencraft.MineReset;
 
-import java.util.List;
-
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -56,19 +54,6 @@ public class CommandManager implements CommandExecutor
 		else Util.sendInvalid(args[0]);
 			
 		return true;
-	}
-	
-	// TODO: This should be moved to Util
-	/**
-	 * Checks if the mine exists
-	 * @param name Name of the mine being checked
-	 * @return True if the mine exists, False if it does not
-	 */
-	public static boolean mineExists(String name)
-	{
-		List<String> mineList = plugin.getRegionData().getStringList("data.list-of-mines");
-		if(mineList.indexOf(name) == -1) return false;
-		else return true;
 	}
 	
 	/**

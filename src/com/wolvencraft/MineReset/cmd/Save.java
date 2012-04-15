@@ -40,7 +40,7 @@ public class Save
 		if(Util.debugEnabled()) Util.log("Selections checks passed");
 		
 		String mineName = args[1];
-		if(CommandManager.mineExists(mineName))
+		if(Util.mineExists(mineName))
 		{
 			Util.sendError("Mine " + mineName + " already exists!");
 			return;
@@ -116,7 +116,7 @@ public class Save
 		// = = Protection
 		baseNode = "mines." + mineName + ".protection";
 		Util.setRegionInt(baseNode + ".padding", protectionPadding);
-		Util.setRegionInt(baseNode + ".protection.padding-top", protectionPaddingTop);
+		Util.setRegionInt(baseNode + ".padding-top", protectionPaddingTop);
 		
 		// = = = PVP
 		Util.setRegionBoolean(baseNode + ".pvp", protectionPVPEnabled);
