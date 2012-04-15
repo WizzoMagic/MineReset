@@ -7,7 +7,7 @@ import com.wolvencraft.MineReset.CommandManager;
 
 public class Help
 {
-	public static void get()
+	public static void run()
 	{
 		String title = Util.getConfigString("messages.title");
 		Util.sendMessage("                    -=[ " + title + " ]=-");
@@ -51,7 +51,7 @@ public class Help
 	private static void formatHelp(String command, String arguments, String description, String node)
 	{
 		CommandSender sender = CommandManager.getSender();
-		if(Util.hasPermission(node, true))
+		if(Util.senderHasPermission(node, true))
 			sender.sendMessage(ChatColor.GREEN + "/" + command + ChatColor.GRAY + arguments + ChatColor.WHITE + " " + description);
 	}
 }
