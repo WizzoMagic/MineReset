@@ -1,5 +1,8 @@
 configuration:
   debug-mode: true
+  broadcast-on-reset: true
+  use-permissions: true
+  use-protection: true
 defaults:
   enabled: true
   blacklist:
@@ -31,6 +34,8 @@ defaults:
     manual:
       cooldown-enabled: true
       cooldown-time: 5
+  materials:
+    default-block: "1"
 messages:
   title: "Mine Reset"
   title-on-signs: "Reset"
