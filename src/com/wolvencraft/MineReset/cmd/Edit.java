@@ -18,7 +18,7 @@ public class Edit
 			
 		// 3 mine edit default
 		// 3 mine cooldown toggle
-		// 4 mine cooldown set <time>
+		// 3 mine cooldown <time>
 		// 4 mine add <name> <percentage>
 		// 4 mine remove <name> <percentage>
 		// 4 mine delete <name>
@@ -48,8 +48,39 @@ public class Edit
 		}
 		else if(args[0].equalsIgnoreCase("cooldown"))
 		{
+			if(curMine == null)
+			{
+				Util.sendError("Select a mine first with /mine edit <name>");
+				return;
+			}
 			
-			return;
+			if(args.length != 3)
+			{
+				Util.sendInvalid(args[0] + " " + args[1]);
+				return;
+			}
+			
+			if(curMine == null)
+			{
+				Util.sendError("Select a mine first with /mine edit <name>");
+				return;
+			}
+			
+			if(Util.isNumeric(args[2]))
+			{
+				Util.setRegionInt("mines." + curMine + ".reset.manual", Integer.parseInt(args[2]));
+				Util.sendSuccess("The cooldown of mine '" + curMine + "' has been set to " + args[2]);
+				return;
+			}
+			else if(args[2].equalsIgnoreCase("toggle"))
+			{
+				return;
+			}
+			else
+			{
+				Util.sendInvalid(args[0] + " " + args[1] + " " + args[2]);
+				return;
+			}
 		}
 		else if(args[0].equalsIgnoreCase("add"))
 		{
@@ -85,7 +116,7 @@ public class Edit
 			double newStonePercent;
 			if((percentAvailable - percent) < 0)
 			{
-				Util.sendError("Invalid percentage. Use /mine " + curMine + " to review the percentages");
+				Util.sendError("Invalid percentage. Use /mine info " + curMine + " to review the percentages");
 				return;
 			}
 			else newStonePercent = percentAvailable - percent;
