@@ -54,6 +54,25 @@ public class Help
 		return;
 	}
 	
+	public static void getEdit()
+	{
+		formatHelp("mine edit", " <name>", "Selects a mine to edit its properties", "");
+		formatHelp("mine cooldown", " toggle", "Toggles the reset cooldown in the mine (manual reset)", "");
+		formatHelp("mine cooldown", " <time>", "Sets a cooldown time for the manual reset", "");
+		formatHelp("mine add", " <block> <percentage>", "Adds another type of block to the mine", "");
+		formatHelp("mine remove", " <block>", "Removes a block from the mine", "");
+		formatHelp("mine delete", " <name>", "Completely deletes all the data about the mine", "");
+	}
+	
+	public static void getBlacklist()
+	{
+		formatHelp("mine blacklist", " <name> enable", "Enables the use of blacklist for the mine", "");
+		formatHelp("mine blacklist", " <name> whitelist", "Makes the blacklist be treated as a whitelist", "");
+		Util.sendMessage(" Blacklist should be enabled");
+		formatHelp("mine blacklist", " <name> add <block>", "Adds a block to the blacklist", "");
+		formatHelp("mine blacklist", " <name> remove <block>", "Removes a block from the whitelist", "");
+	}
+	
 	private static void formatHelp(String command, String arguments, String description, String node)
 	{
 		CommandSender sender = CommandManager.getSender();
