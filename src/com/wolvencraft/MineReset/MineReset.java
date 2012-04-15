@@ -6,6 +6,7 @@ package com.wolvencraft.MineReset;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.logging.Logger;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -26,18 +27,23 @@ import com.wolvencraft.MineReset.cmd.Util;
 
 public class MineReset extends JavaPlugin
 {
+	public CommandManager manager;
 	private FileConfiguration regionData = null;
 	private File regionDataFile = null;
+	Logger log;
 	
 	public void onEnable()
 	{
+		log = this.getLogger();
 		
-		
+		manager = new CommandManager(this);
+		getCommand("mine").setExecutor(manager);
+		log.info("MineReset started");
 	}
 	
 	public void onDisable()
 	{
-		
+		log.info("MineReset stopped");
 	}
 	
 	public void reloadRegionData() {

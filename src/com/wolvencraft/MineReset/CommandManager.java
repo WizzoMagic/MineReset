@@ -34,8 +34,14 @@ public class CommandManager implements CommandExecutor
 		
 		if(args[0].equalsIgnoreCase("info")) {}
 		else if(args[0].equalsIgnoreCase("list")) {}
-		else if(args[0].equalsIgnoreCase("reset")) {}
-		else if(args[0].equalsIgnoreCase("select")) {}
+		else if(args[0].equalsIgnoreCase("reset"))
+		{
+			Reset.run(args);
+		}
+		else if(args[0].equalsIgnoreCase("select"))
+		{
+			Select.run(args);
+		}
 		else if(args[0].equalsIgnoreCase("save")) {}
 		else if(args[0].equalsIgnoreCase("edit")) {}
 		else if(args[0].equalsIgnoreCase("delete")) {}
