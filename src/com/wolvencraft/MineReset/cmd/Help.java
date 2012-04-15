@@ -29,6 +29,8 @@ public class Help
 		formatHelp("mine auto", "", "Shows a help page on how to automate the mine", "auto");
 		
 		formatHelp("mine protection", "", "Shows how to set up a mine protection", "protection");
+		
+		return;
 	}
 	
 	public static void getSave()
@@ -36,6 +38,8 @@ public class Help
 		formatHelp("mine save", " <name>", "Saves the region for future use", "");
 		Util.sendMessage(" If no name is provided, the default name will be used");
 		Util.sendMessage(" The default name is defined in the configuration file");
+		
+		return;
 	}
 	
 	public static void getSelect()
@@ -46,6 +50,8 @@ public class Help
 		formatHelp("mine select", " pos1", "Creates a reference point 1 at your immediate location", "");
 		formatHelp("mine select", " pos2", "Creates a reference point 2 at your immediate location", "");
 		Util.sendMessage(" You can also select a region with your normal World Edit tool");
+		
+		return;
 	}
 	
 	private static void formatHelp(String command, String arguments, String description, String node)
@@ -53,5 +59,7 @@ public class Help
 		CommandSender sender = CommandManager.getSender();
 		if(Util.senderHasPermission(node, true))
 			sender.sendMessage(ChatColor.GREEN + "/" + command + ChatColor.GRAY + arguments + ChatColor.WHITE + " " + description);
+		
+		return;
 	}
 }

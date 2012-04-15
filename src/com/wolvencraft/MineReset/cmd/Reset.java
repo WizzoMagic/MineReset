@@ -6,6 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 
+import com.wolvencraft.MineReset.CommandManager;
 import com.wolvencraft.MineReset.util.Pattern;
 
 public class Reset
@@ -13,14 +14,26 @@ public class Reset
 	
 	public static void run(String[] args)
 	{
+		if(!Util.senderHasPermission("reset", true))
+		{
+			Util.sendDenied("reset");
+			return;
+		}
 		String mineName;
 		if(args[0].length() > 2)
 		{
 			Util.sendInvalid(args[0] + " " + args[1] + " " + args[2]);
+			return;
 		}
 		if(args[0].length() == 1)
 			mineName = Util.getConfigString("configuration.default-name");
 		else mineName = args[1];
+		
+		if(!CommandManager.mineExists(mineName))
+		{
+			Util.sendError("Mine '" + mineName + "' does not exist");
+			return;
+		}
 		
 		List<String> blockList = Util.getConfigList("mines." + mineName + ".materials.blocks");
 		List<String> weightList = Util.getConfigList("mines." + mineName + ".materials.weights");

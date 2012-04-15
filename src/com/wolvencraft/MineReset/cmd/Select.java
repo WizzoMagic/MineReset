@@ -9,7 +9,7 @@ public class Select
 {
 	public static Location[] run(String[] args)
 	{
-		if(!Util.isPlayer() || !Util.hasPermission("edit", false))
+		if(!Util.isPlayer() || !Util.senderHasPermission("edit", false))
 		{
 			Util.sendDenied(args[0]);
 			return null;
@@ -18,10 +18,12 @@ public class Select
 		if(args.length == 1)
 		{
 			Help.getSelect();
+			return null;
 		}
 		if(args.length > 2)
 		{
 			Util.sendInvalid(args[0] + " " + args[1] + " " + args[2]);
+			return null;
 		}
 		
 		Location[] loc = {null, null};

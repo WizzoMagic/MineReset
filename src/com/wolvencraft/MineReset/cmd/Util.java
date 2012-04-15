@@ -148,7 +148,7 @@ public class Util
 	public static void sendInvalid(String command)
 	{
 		CommandSender sender = CommandManager.getSender();
-		String title = CommandManager.getPlugin().getConfig().getString("messages.title");
+		String title = getConfigString("messages.title");
 		String message = getConfigString("messages.invalid-command");
 		log(sender.getName() + " sent an invalid command (" + command + ")");
 		sender.sendMessage(ChatColor.RED + "[" + title + "] " + ChatColor.WHITE + message);
@@ -161,7 +161,7 @@ public class Util
 	public static void sendDenied(String command)
 	{
 		CommandSender sender = CommandManager.getSender();
-		String title = CommandManager.getPlugin().getConfig().getString("messages.title");
+		String title = getConfigString("messages.title");
 		String message = getConfigString("messages.access-denied");
 		log(sender.getName() + " was denied to use a command (" + command + ")");
 		sender.sendMessage(ChatColor.RED + "[" + title + "] " + ChatColor.WHITE + message);
