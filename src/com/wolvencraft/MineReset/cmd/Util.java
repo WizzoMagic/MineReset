@@ -17,10 +17,10 @@ public class Util
 	 * @param node The permission node
 	 * @return true is the sender has a permission, false if he does not
 	 */
-	public static boolean hasPermission(String node, boolean allowConsole)
+	public static boolean senderHasPermission(String node, boolean allowConsole)
 	{
 		CommandSender sender = CommandManager.getSender();
-		boolean usePermissions = CommandManager.getPlugin().getConfig().getBoolean("configuration.use-permissions");
+		boolean usePermissions = getConfigBoolean("configuration.use-permissions");
 		
 		// If a command is sent from the console, it is
 		// automatically allowed
@@ -31,6 +31,28 @@ public class Util
 			if(allowConsole) return true;
 			else return false;
 		}
+		
+		if(!usePermissions)
+		{
+			if(player.isOp()) return true;
+			else return false;
+		}
+		
+		if(player.hasPermission("minereset." + node))
+			return true;
+		
+		return false;
+	}
+	
+
+	/**
+	 * Checks if the command sender has a permission.
+	 * @param node The permission node
+	 * @return true is the sender has a permission, false if he does not
+	 */
+	public static boolean playerHasPermission(Player player, String node)
+	{
+		boolean usePermissions = getConfigBoolean("configuration.use-permissions");
 		
 		if(!usePermissions)
 		{
@@ -62,7 +84,7 @@ public class Util
 	 */
 	public static boolean debugEnabled()
 	{
-		if(CommandManager.getPlugin().getConfig().getBoolean("configuration.debug-mode")) return true;
+		if(getConfigBoolean("configuration.debug-mode")) return true;
 		else return false;
 	}
 	
@@ -83,8 +105,18 @@ public class Util
 	public static void sendSuccess(String message)
 	{
 		CommandSender sender = CommandManager.getSender();
-		String title = CommandManager.getPlugin().getConfig().getString("messages.title");
+		String title = getConfigString("messages.title");
 		sender.sendMessage(ChatColor.GREEN + "[" + title + "] " + ChatColor.WHITE + message);
+	}
+	
+	/**
+	 * Sends a green-titled message to a player
+	 * @param message A message to be sent
+	 */
+	public static void sendPlayerSuccess(Player player, String message)
+	{
+		String title = getConfigString("messages.title");
+		player.sendMessage(ChatColor.GREEN + "[" + title + "] " + ChatColor.WHITE + message);
 	}
 	
 	/**
@@ -94,8 +126,18 @@ public class Util
 	public static void sendError(String message)
 	{
 		CommandSender sender = CommandManager.getSender();
-		String title = CommandManager.getPlugin().getConfig().getString("messages.title");
+		String title = getConfigString("messages.title");
 		sender.sendMessage(ChatColor.RED + "[" + title + "] " + ChatColor.WHITE + message);
+	}
+	
+	/**
+	 * Sends a red-titled message to a player
+	 * @param message A message to be sent
+	 */
+	public static void sendPlayerError(Player player, String message)
+	{
+		String title = getConfigString("messages.title");
+		player.sendMessage(ChatColor.RED + "[" + title + "] " + ChatColor.WHITE + message);
 	}
 	
 	/**
