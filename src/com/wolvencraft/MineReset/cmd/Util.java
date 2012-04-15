@@ -5,6 +5,7 @@ import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -387,8 +388,47 @@ public class Util
 		CommandManager.getPlugin().getRegionData().set(node, data);
 	}
 	
+	/**
+	 * Saves region data to a file.
+	 * This should not be used too often due to possible server lag
+	 */
 	public static void saveRegionData()
 	{
 		CommandManager.getPlugin().saveRegionData();
+	}
+	
+	/**
+	 * Returns the numeric ID of a block specified
+	 * @param blockName Name of a block
+	 * @return Block ID if a block exists, -1 if it does not
+	 */
+	public static int getBlockId(String blockName)
+	{
+		try
+		{
+			if(isNumeric(blockName)) return Integer.parseInt(blockName);
+			else
+			{
+				Material material = Material.matchMaterial(blockName);
+				if(material == null) return -1;
+				return material.getId();
+			}
+		}
+		catch(NumberFormatException nfe) { return -1; }
+	}
+	
+	/**
+	 * Checks if a string is numeric
+	 * @param str String String to be checked
+	 * @return boolean True if a string is numeric
+	 */
+	@SuppressWarnings("unused")
+	public static boolean isNumeric(String str)  
+	{  
+	  try
+	  { double d = Double.parseDouble(str); }
+	  catch(NumberFormatException nfe)  
+	  { return false; }  
+	  return true;  
 	}
 }
