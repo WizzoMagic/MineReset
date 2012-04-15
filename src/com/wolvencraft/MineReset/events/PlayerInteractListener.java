@@ -43,7 +43,7 @@ public class PlayerInteractListener implements Listener
 	        	if(Util.debugEnabled()) Util.log("The sign is formatted");
 	        	
 	        	
-	     		String mineName = sign.getLine(1);
+	     		String mineName[] = {sign.getLine(1)};
 	     		Reset.run(mineName);
 	
 	        	if(Util.debugEnabled()) Util.log("Event finishing");
